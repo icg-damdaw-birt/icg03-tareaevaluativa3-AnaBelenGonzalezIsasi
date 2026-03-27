@@ -29,6 +29,8 @@ model Movie {
   year        Int                             // Año de estreno
   posterUrl   String?                         // URL del póster (opcional)
 
+  rating      Int        @default(0)          // Puntuación de 0 a 5
+
   createdAt DateTime @default(now())       // Cuándo se añadió
   updatedAt DateTime @updatedAt            // Última modificación
 

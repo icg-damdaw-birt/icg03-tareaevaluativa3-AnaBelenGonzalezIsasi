@@ -6,7 +6,8 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
-  toggleFavorite, // <-- Importar la nueva función
+  toggleFavorite,
+  updateRating, // <-- Importar la nueva función
 } = require('../controllers/movieController');
 
 const router = express.Router();
@@ -24,5 +25,6 @@ router.delete('/:id', deleteMovie); // DELETE /api/api/movies/:id - Eliminar pel
 
 // --- AÑADIR ESTA NUEVA RUTA ---
 router.post('/:id/favorite', toggleFavorite); // POST /api/movies/some-movie-id/favorite
+router.patch('/:id/rating', updateRating); // <-- AÑADIR ESTA NUEVA RUTA
 
 module.exports = router;
