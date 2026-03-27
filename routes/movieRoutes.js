@@ -6,6 +6,7 @@ const {
   createMovie,
   updateMovie,
   deleteMovie,
+  toggleFavorite, // <-- Importar la nueva función
 } = require('../controllers/movieController');
 
 const router = express.Router();
@@ -19,6 +20,9 @@ router.get('/', getAllMovies);      // GET /api/movies - Listar mis películas
 router.get('/:id', getMovieById);   // GET /api/movies/:id - Ver una película
 router.post('/', createMovie);      // POST /api/movies - Crear película
 router.put('/:id', updateMovie);    // PUT /api/movies/:id - Actualizar película
-router.delete('/:id', deleteMovie); // DELETE /api/movies/:id - Eliminar película
+router.delete('/:id', deleteMovie); // DELETE /api/api/movies/:id - Eliminar película
+
+// --- AÑADIR ESTA NUEVA RUTA ---
+router.post('/:id/favorite', toggleFavorite); // POST /api/movies/some-movie-id/favorite
 
 module.exports = router;

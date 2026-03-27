@@ -17,25 +17,35 @@ model User {
   createdAt DateTime @default(now())       // Fecha de registro
   updatedAt DateTime @updatedAt            // Última actualización
 
-  movies    Movie[]  // Películas de este usuario
+  movies    Movie[]    // Películas de este usuario
+  favorites Favorite[] // Favoritos del usuario
 }
 
 // Película en la videoteca personal de un usuario
 model Movie {
-  id        String   @id @default(cuid())  // ID único
-  title     String                         // Título de la película
-  director  String                         // Director
-  year      Int                            // Año de estreno
-  posterUrl String?                        // URL del póster (opcional)
-  
-  // Campos que se añadirán en UD3:
-  // - isFavorite Boolean @default(false)  // Favoritos (UD3 - guiado)
-  // - rating     Int?     @default(0)     // Rating 0-5 (UD3 - ejercicio)
-  
+  id          String     @id @default(cuid()) // ID único
+  title       String                          // Título de la película
+  description String?                         // Descripción (opcional)
+  year        Int                             // Año de estreno
+  posterUrl   String?                         // URL del póster (opcional)
+
   createdAt DateTime @default(now())       // Cuándo se añadió
   updatedAt DateTime @updatedAt            // Última modificación
 
   // Relación: esta película pertenece a un usuario
-  ownerId   String
-  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+
+  favorites Favorite[] // Usuarios que han marcado esta película como favorita
+}
+
+// --- AÑADIR ESTE NUEVO MODELO ---
+model Favorite {
+  id      String @id @default(cuid())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  movie   Movie  @relation(fields: [movieId], references: [id])
+  movieId String
+
+  @@unique([userId, movieId]) // Un usuario solo puede tener una película como favorita una vez
 }

@@ -103,3 +103,48 @@ exports.deleteMovie = async (req, res) => {
     res.status(500).json({ error: 'No se pudo eliminar la película' });
   }
 };
+
+// --- AÑADIR ESTA NUEVA FUNCIÓN ---
+exports.toggleFavorite = async (req, res) => {
+  const { id } = req.params; // ID de la película
+  const { userId } = req.user; // ID del usuario (del middleware de autenticación)
+
+  try {
+    // 1. Verificar si la película existe
+    const movie = await prisma.movie.findUnique({ where: { id } });
+    if (!movie) {
+      return res.status(404).json({ message: 'Película no encontrada' });
+    }
+
+    // 2. Verificar si ya es un favorito
+    const existingFavorite = await prisma.favorite.findUnique({
+      where: {
+        userId_movieId: {
+          userId,
+          movieId: id,
+        },
+      },
+    });
+
+    if (existingFavorite) {
+      // Si ya existe, la eliminamos (desmarcar como favorita)
+      await prisma.favorite.delete({
+        where: {
+          id: existingFavorite.id,
+        },
+      });
+      res.status(200).json({ message: 'Película eliminada de favoritos' });
+    } else {
+      // Si no existe, la creamos (marcar como favorita)
+      await prisma.favorite.create({
+        data: {
+          userId,
+          movieId: id,
+        },
+      });
+      res.status(201).json({ message: 'Película añadida a favoritos' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error en el servidor', error: error.message });
+  }
+};
