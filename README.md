@@ -312,4 +312,5 @@ npm run prisma:reset
 
 ## 📝 Licencia
 
-Este proyecto es material educativo.
+Este proyecto es material educativo.t e s t  
+ 
