@@ -41,22 +41,29 @@ exports.getMovieById = async (req, res) => {
 // POST /api/movies - Crea una nueva película
 exports.createMovie = async (req, res) => {
   const { title, director, year, posterUrl } = req.body;
+  const ownerId = req.user.userId;
 
   try {
+    // Validación y parseo del año para asegurar que es un número o null
+    const yearAsNumber = year ? parseInt(year, 10) : null;
+    if (year && isNaN(yearAsNumber)) {
+      return res.status(400).json({ error: 'El año debe ser un número válido.' });
+    }
+
     // Crea la película y la asocia automáticamente al usuario logueado
     const movie = await prisma.movie.create({
       data: {
         title,
         director,
-        year,
+        year: yearAsNumber,
         posterUrl,
-        ownerId: req.user.userId,  // Viene del token JWT
+        ownerId, // Viene del token JWT
       },
     });
 
     res.status(201).json(movie);
   } catch (error) {
-    res.status(400).json({ error: 'Datos inválidos' });
+    res.status(500).json({ error: 'Error al crear la película' });
   }
 };
 

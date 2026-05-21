@@ -6,7 +6,7 @@ generator client {
 // - Desarrollo (UD3-4): SQLite (archivo local ./dev.db)
 // - Producción (UD5): PostgreSQL en Neon
 datasource db {
-  provider = "sqlite"  // Cambiar a "postgresql" en UD5
+  provider = "postgresql" 
 }
 
 // Usuario del sistema (alumno con su videoteca personal)
@@ -23,13 +23,13 @@ model User {
 
 // Película en la videoteca personal de un usuario
 model Movie {
-  id          String     @id @default(cuid()) // ID único
-  title       String                          // Título de la película
-  description String?                         // Descripción (opcional)
-  year        Int                             // Año de estreno
-  posterUrl   String?                         // URL del póster (opcional)
-
-  rating      Int        @default(0)          // Puntuación de 0 a 5
+  id         String   @id @default(cuid()) // ID único
+  title      String                          // Título de la película
+  year       Int?                            // Año de estreno (opcional)
+  posterUrl  String?                         // URL del póster (opcional)
+  director   String?                         // Director de la película (opcional)
+  isFavorite Boolean  @default(false)       // Si es favorita
+  rating     Int?                            // Puntuación de 0 a 5 (opcional)
 
   createdAt DateTime @default(now())       // Cuándo se añadió
   updatedAt DateTime @updatedAt            // Última modificación
